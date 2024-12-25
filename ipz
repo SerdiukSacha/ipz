@@ -1,0 +1,76 @@
+// IT-команда симулятор на основі Java
+
+import java.util.*;
+
+// Ролі членів команди
+abstract class TeamMember {
+    protected String name;
+
+    public TeamMember(String name) {
+        this.name = name;
+    }
+
+    public abstract void performRole();
+}
+
+class Developer extends TeamMember {
+    public Developer(String name) {
+        super(name);
+    }
+
+    @Override
+    public void performRole() {
+        System.out.println(name + " пише код.");
+    }
+}
+
+class Tester extends TeamMember {
+    public Tester(String name) {
+        super(name);
+    }
+
+    @Override
+    public void performRole() {
+        System.out.println(name + " тестує код.");
+    }
+}
+
+class ProjectManager extends TeamMember {
+    public ProjectManager(String name) {
+        super(name);
+    }
+
+    @Override
+    public void performRole() {
+        System.out.println(name + " координує команду.");
+    }
+}
+
+// Фабрика для створення членів команди
+class TeamMemberFactory {
+    public static TeamMember createTeamMember(String role, String name) {
+        return switch (role.toLowerCase()) {
+            case "developer" -> new Developer(name);
+            case "tester" -> new Tester(name);
+            case "manager" -> new ProjectManager(name);
+            default -> throw new IllegalArgumentException("Невідома роль: " + role);
+        };
+    }
+}
+
+// Медіатор для координації команди
+class ProjectMediator {
+    private List<TeamMember> teamMembers = new ArrayList<>();
+
+    public void addTeamMember(TeamMember member) {
+        teamMembers.add(member);
+    }
+
+    public void assignTask(String task) {
+        System.out.println("Призначення завдання: " + task);
+        for (TeamMember member : teamMembers) {
+            member.performRole();
+        }
+    }
+}
+
